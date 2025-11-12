@@ -1,0 +1,35 @@
+variable "region" {
+  description = "AWS region to deploy resources in"
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "ID of the existing VPC where resources will be created"
+  type        = string
+}
+
+variable "cidr_blocks" {
+  description = "List of CIDR blocks for the 4 private subnets (in order)"
+  type        = list(string)
+  default     = ["172.31.48.0/20", "172.31.64.0/20", "172.31.80.0/20", "172.31.96.0/20"]
+}
+
+variable "public_subnet_a_id" {
+  description = "Public subnet ID in AZ A where NAT Gateway A will be created"
+  type        = string
+}
+
+variable "public_subnet_b_id" {
+  description = "Public subnet ID in AZ B where NAT Gateway B will be created"
+  type        = string
+}
+
+variable "availability_zone_a" {
+  description = "Availability Zone name for AZ A (e.g. us-east-1a)"
+  type        = string
+}
+
+variable "availability_zone_b" {
+  description = "Availability Zone name for AZ B (e.g. us-east-1b)"
+  type        = string
+}
