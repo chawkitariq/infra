@@ -12,8 +12,6 @@ module "vpc" {
   vpc_id              = var.vpc_id
   availability_zone_a = var.availability_zone_a
   availability_zone_b = var.availability_zone_b
-  public_subnet_a_id  = var.public_subnet_a_id
-  public_subnet_b_id  = var.public_subnet_b_id
 }
 
 

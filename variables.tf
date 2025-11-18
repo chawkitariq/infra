@@ -8,16 +8,6 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "public_subnet_a_id" {
-  description = "Public subnet ID in AZ A where NAT Gateway A will be created"
-  type        = string
-}
-
-variable "public_subnet_b_id" {
-  description = "Public subnet ID in AZ B where NAT Gateway B will be created"
-  type        = string
-}
-
 variable "availability_zone_a" {
   description = "Availability Zone name for AZ A (e.g. us-east-1a)"
   type        = string

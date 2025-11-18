@@ -1,3 +1,7 @@
+########################################
+# VARIABLES
+########################################
+
 variable "region" {
   description = "AWS region to deploy resources in"
   type        = string
@@ -9,29 +13,23 @@ variable "vpc_id" {
 }
 
 variable "cidr_blocks" {
-  description = "List of CIDR blocks for the 4 private subnets"
+  description = "List of CIDR blocks for subnets"
   type = object({
+    public_a  : string
+    public_b  : string
     private_a1 : string
     private_a2 : string
     private_b1 : string
     private_b2 : string
   })
   default = {
-    private_a1 : "172.31.48.0/20",
-    private_a2 : "172.31.64.0/20",
-    private_b1 : "172.31.80.0/20",
-    private_b2 : "172.31.96.0/20",
+    public_a  = "172.31.48.0/20"
+    public_b  = "172.31.64.0/20"
+    private_a1 = "172.31.80.0/20"
+    private_a2 = "172.31.96.0/20"
+    private_b1 = "172.31.112.0/20"
+    private_b2 = "172.31.128.0/20"
   }
-}
-
-variable "public_subnet_a_id" {
-  description = "Public subnet ID in AZ A where NAT Gateway A will be created"
-  type        = string
-}
-
-variable "public_subnet_b_id" {
-  description = "Public subnet ID in AZ B where NAT Gateway B will be created"
-  type        = string
 }
 
 variable "availability_zone_a" {

@@ -1,5 +1,5 @@
 ########################################
-# PRIVATE SUBNETS (4 total, 2 per AZ)
+# PRIVATE SUBNETS (2 per AZ)
 ########################################
 
 # AZ A
@@ -7,14 +7,20 @@ resource "aws_subnet" "private_a1" {
   vpc_id            = var.vpc_id
   cidr_block        = var.cidr_blocks.private_a1
   availability_zone = var.availability_zone_a
-  tags              = { Name = "private-a1" }
+  tags = {
+    Name                           = "private-a1"
+    "kubernetes.io/role/internal-elb" = "1"
+  }
 }
 
 resource "aws_subnet" "private_a2" {
   vpc_id            = var.vpc_id
   cidr_block        = var.cidr_blocks.private_a2
   availability_zone = var.availability_zone_a
-  tags              = { Name = "private-a2" }
+  tags = {
+    Name                           = "private-a2"
+    "kubernetes.io/role/internal-elb" = "1"
+  }
 }
 
 # AZ B
@@ -22,14 +28,48 @@ resource "aws_subnet" "private_b1" {
   vpc_id            = var.vpc_id
   cidr_block        = var.cidr_blocks.private_b1
   availability_zone = var.availability_zone_b
-  tags              = { Name = "private-b1" }
+  tags = {
+    Name                           = "private-b1"
+    "kubernetes.io/role/internal-elb" = "1"
+  }
 }
 
 resource "aws_subnet" "private_b2" {
   vpc_id            = var.vpc_id
   cidr_block        = var.cidr_blocks.private_b2
   availability_zone = var.availability_zone_b
-  tags              = { Name = "private-b2" }
+  tags = {
+    Name                           = "private-b2"
+    "kubernetes.io/role/internal-elb" = "1"
+  }
+}
+
+########################################
+# PUBLIC SUBNETS (1 per AZ)
+########################################
+
+# AZ A
+resource "aws_subnet" "public_a" {
+  vpc_id                  = var.vpc_id
+  cidr_block              = var.cidr_blocks.public_a
+  availability_zone       = var.availability_zone_a
+  map_public_ip_on_launch = true
+  tags = {
+    Name                     = "public-a"
+    "kubernetes.io/role/elb" = "1"
+  }
+}
+
+# AZ B
+resource "aws_subnet" "public_b" {
+  vpc_id                  = var.vpc_id
+  cidr_block              = var.cidr_blocks.public_b
+  availability_zone       = var.availability_zone_b
+  map_public_ip_on_launch = true
+  tags = {
+    Name                     = "public-b"
+    "kubernetes.io/role/elb" = "1"
+  }
 }
 
 ########################################
@@ -52,13 +92,13 @@ resource "aws_eip" "natgw_b" {
 
 resource "aws_nat_gateway" "natgw_a" {
   allocation_id = aws_eip.natgw_a.id
-  subnet_id     = var.public_subnet_a_id
+  subnet_id     = aws_subnet.public_a.id
   tags          = { Name = "natgw-a" }
 }
 
 resource "aws_nat_gateway" "natgw_b" {
   allocation_id = aws_eip.natgw_b.id
-  subnet_id     = var.public_subnet_b_id
+  subnet_id     = aws_subnet.public_b.id
   tags          = { Name = "natgw-b" }
 }
 
@@ -77,9 +117,10 @@ resource "aws_route_table" "private_b" {
 }
 
 ########################################
-# ROUTES TO NAT GATEWAYS
+# ROUTES
 ########################################
 
+# Private subnets to NAT gateways
 resource "aws_route" "private_a_nat" {
   route_table_id         = aws_route_table.private_a.id
   destination_cidr_block = "0.0.0.0/0"
@@ -96,7 +137,7 @@ resource "aws_route" "private_b_nat" {
 # ROUTE TABLE ASSOCIATIONS
 ########################################
 
-# AZ A
+# Private subnets AZ A
 resource "aws_route_table_association" "private_a1" {
   subnet_id      = aws_subnet.private_a1.id
   route_table_id = aws_route_table.private_a.id
@@ -107,7 +148,7 @@ resource "aws_route_table_association" "private_a2" {
   route_table_id = aws_route_table.private_a.id
 }
 
-# AZ B
+# Private subnets AZ B
 resource "aws_route_table_association" "private_b1" {
   subnet_id      = aws_subnet.private_b1.id
   route_table_id = aws_route_table.private_b.id
