@@ -1,5 +1,5 @@
-output "private_subnet_ids" {
-  description = "List of CIDR blocks for subnets"
+output "subnet_ids" {
+  description = "List of subnets IDs"
   value = {
     public_a : aws_subnet.public_a.id,
     public_b : aws_subnet.public_b.id,
