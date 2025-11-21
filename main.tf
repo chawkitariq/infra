@@ -22,7 +22,7 @@ module "vpc" {
 module "eks" {
   source = "./modules/eks"
   subnet_ids = [
-    module.vpc.subnet_ids.private_a1,
-    module.vpc.subnet_ids.private_b1,
+    module.vpc.subnet_ids.public_a,
+    module.vpc.subnet_ids.public_b,
   ]
 }
