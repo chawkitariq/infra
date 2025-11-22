@@ -67,6 +67,7 @@ terraform destroy
 
 - Public subnets use the default VPC main routing table
 - The infrastructure uses an **existing VPC**
-- EKS cluster uses **API authentication mode** with bootstrap cluster creator admin permissions disabled
+- EKS cluster uses **API authentication mode** with bootstrap cluster creator admin permissions enabled
 - Subnets are tagged for Kubernetes integration (`kubernetes.io/role/elb` and `kubernetes.io/role/internal-elb`)
 - NAT gateways are created in public subnets to provide internet access for private subnets
+- **AWS Load Balancer Controller** is automatically installed
