@@ -1,58 +1,39 @@
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 ########################################
-# PRIVATE SUBNETS (2 per AZ)
+# PRIVATE SUBNETS
 ########################################
 
-# AZ A
-resource "aws_subnet" "private_a1" {
+resource "aws_subnet" "private_a" {
   vpc_id            = var.vpc_id
-  cidr_block        = var.cidr_blocks.private_a1
-  availability_zone = var.availability_zone_a
+  cidr_block        = var.private_subnet_cidr_blocks[0]
+  availability_zone = data.aws_availability_zones.available.names[0]
   tags = {
-    Name                           = "private-a1"
+    Name                              = "private-a"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
 
-resource "aws_subnet" "private_a2" {
+resource "aws_subnet" "private_b" {
   vpc_id            = var.vpc_id
-  cidr_block        = var.cidr_blocks.private_a2
-  availability_zone = var.availability_zone_a
+  cidr_block        = var.private_subnet_cidr_blocks[1]
+  availability_zone = data.aws_availability_zones.available.names[1]
   tags = {
-    Name                           = "private-a2"
-    "kubernetes.io/role/internal-elb" = "1"
-  }
-}
-
-# AZ B
-resource "aws_subnet" "private_b1" {
-  vpc_id            = var.vpc_id
-  cidr_block        = var.cidr_blocks.private_b1
-  availability_zone = var.availability_zone_b
-  tags = {
-    Name                           = "private-b1"
-    "kubernetes.io/role/internal-elb" = "1"
-  }
-}
-
-resource "aws_subnet" "private_b2" {
-  vpc_id            = var.vpc_id
-  cidr_block        = var.cidr_blocks.private_b2
-  availability_zone = var.availability_zone_b
-  tags = {
-    Name                           = "private-b2"
+    Name                              = "private-b"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
 
 ########################################
-# PUBLIC SUBNETS (1 per AZ)
+# PUBLIC SUBNETS
 ########################################
 
-# AZ A
 resource "aws_subnet" "public_a" {
   vpc_id                  = var.vpc_id
-  cidr_block              = var.cidr_blocks.public_a
-  availability_zone       = var.availability_zone_a
+  cidr_block              = var.public_subnet_cidr_blocks[0]
+  availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
   tags = {
     Name                     = "public-a"
@@ -60,11 +41,10 @@ resource "aws_subnet" "public_a" {
   }
 }
 
-# AZ B
 resource "aws_subnet" "public_b" {
   vpc_id                  = var.vpc_id
-  cidr_block              = var.cidr_blocks.public_b
-  availability_zone       = var.availability_zone_b
+  cidr_block              = var.public_subnet_cidr_blocks[1]
+  availability_zone       = data.aws_availability_zones.available.names[1]
   map_public_ip_on_launch = true
   tags = {
     Name                     = "public-b"
@@ -87,7 +67,7 @@ resource "aws_eip" "natgw_b" {
 }
 
 ########################################
-# NAT GATEWAYS (1 per AZ)
+# NAT GATEWAYS
 ########################################
 
 resource "aws_nat_gateway" "natgw_a" {
@@ -103,7 +83,7 @@ resource "aws_nat_gateway" "natgw_b" {
 }
 
 ########################################
-# PRIVATE ROUTE TABLES (1 per AZ)
+# PRIVATE ROUTE TABLES
 ########################################
 
 resource "aws_route_table" "private_a" {
@@ -120,7 +100,6 @@ resource "aws_route_table" "private_b" {
 # ROUTES
 ########################################
 
-# Private subnets to NAT gateways
 resource "aws_route" "private_a_nat" {
   route_table_id         = aws_route_table.private_a.id
   destination_cidr_block = "0.0.0.0/0"
@@ -137,24 +116,12 @@ resource "aws_route" "private_b_nat" {
 # ROUTE TABLE ASSOCIATIONS
 ########################################
 
-# Private subnets AZ A
-resource "aws_route_table_association" "private_a1" {
-  subnet_id      = aws_subnet.private_a1.id
+resource "aws_route_table_association" "private_a" {
+  subnet_id      = aws_subnet.private_a.id
   route_table_id = aws_route_table.private_a.id
 }
 
-resource "aws_route_table_association" "private_a2" {
-  subnet_id      = aws_subnet.private_a2.id
-  route_table_id = aws_route_table.private_a.id
-}
-
-# Private subnets AZ B
-resource "aws_route_table_association" "private_b1" {
-  subnet_id      = aws_subnet.private_b1.id
-  route_table_id = aws_route_table.private_b.id
-}
-
-resource "aws_route_table_association" "private_b2" {
-  subnet_id      = aws_subnet.private_b2.id
+resource "aws_route_table_association" "private_b" {
+  subnet_id      = aws_subnet.private_b.id
   route_table_id = aws_route_table.private_b.id
 }

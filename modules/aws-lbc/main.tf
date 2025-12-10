@@ -79,7 +79,6 @@ resource "kubernetes_service_account" "lbc" {
 
   depends_on = [aws_iam_role_policy_attachment.lbc]
 }
-
 resource "helm_release" "lbc" {
   name       = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
@@ -115,6 +114,16 @@ resource "helm_release" "lbc" {
   {
     name  = "image.tag"
     value = var.lbc_image_tag
+  },
+
+  {
+    name  = "controllerConfig.featureGates.NLBGatewayAPI"
+    value = var.enable_nlb_gateway_api
+  },
+
+  {
+    name  = "controllerConfig.featureGates.ALBGatewayAPI"
+    value = var.enable_alb_gateway_api
   }]
 
   depends_on = [kubernetes_service_account.lbc]

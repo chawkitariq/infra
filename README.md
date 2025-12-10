@@ -16,7 +16,7 @@ The infrastructure is organized into two main layers:
 
 ### Network Layer (VPC Module)
 - **Public Subnets**: 2 subnets (1 per availability zone) for internet-facing resources
-- **Private Subnets**: 4 subnets (2 per availability zone) for application workloads
+- **Private Subnets**: 2 subnets (1 per availability zone) for application workloads
 - **NAT Gateways**: 2 NAT gateways (1 per AZ) for outbound internet access from private subnets
 - **Route Tables**: Separate route tables for private subnets with NAT gateway routing
 - **Kubernetes Tags**: Subnets are tagged for Kubernetes ELB integration
@@ -40,9 +40,11 @@ The infrastructure is organized into two main layers:
 ## Usage
 
 ### Initialize Terraform
-
 ```bash
-terraform init
+terraform init \
+  -backend-config="bucket=ct-s3-state-backend" \
+  -backend-config="key=infra-terraform.tfstate" \
+  -backend-config="region=eu-west-3"
 ```
 
 ### Plan Changes

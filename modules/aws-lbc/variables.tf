@@ -24,3 +24,15 @@ variable "lbc_image_tag" {
   type        = string
   default     = "v2.14.1"
 }
+
+variable "enable_nlb_gateway_api" {
+  description = "Enable NLB Gateway API"
+  type        = bool
+  default     = false
+}
+
+variable "enable_alb_gateway_api" {
+  description = "Enable ALB Gateway API"
+  type        = bool
+  default     = false
+}
