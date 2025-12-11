@@ -1,7 +1,7 @@
 variable "cluster_name" {
   description = "The name of the cluster"
   type        = string
-  default = "infraks"
+  default     = "infraks"
 }
 
 variable "eks_version" {

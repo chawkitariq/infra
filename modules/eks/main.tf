@@ -3,7 +3,7 @@
 ########################################
 
 resource "aws_eks_cluster" "cluster" {
-  name = "${var.cluster_name}"
+  name = var.cluster_name
 
   access_config {
     authentication_mode                         = "API"
@@ -36,7 +36,7 @@ resource "aws_eks_cluster" "cluster" {
   vpc_config {
     endpoint_private_access = true
     endpoint_public_access  = true
-    subnet_ids = var.subnet_ids
+    subnet_ids              = var.subnet_ids
   }
 
   depends_on = [
