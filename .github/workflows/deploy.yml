@@ -7,12 +7,6 @@ on:
     paths:
       - "**.tf"
       - ".github/workflows/deploy.yml"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "**.tf"
-      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 env:
@@ -63,21 +57,5 @@ jobs:
           -var="vpc_id=${{ secrets.VPC_ID }}" \
           -no-color -out=tfplan
 
-      - name: Comment PR with Plan
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const plan = require('child_process').execSync('terraform show -no-color tfplan').toString();
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## Terraform Plan\n\n\`\`\`\n${plan}\n\`\`\``
-            });
-
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply tfplan
