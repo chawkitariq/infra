@@ -53,9 +53,9 @@ jobs:
         id: plan
         run: |
           terraform plan \
-          -no-color \
           -var="region=${{ secrets.AWS_REGION }}" \
-          -var="vpc_id=${{ secrets.VPC_ID }}" -out=tfplan
+          -var="vpc_id=${{ secrets.VPC_ID }}" \
+          -no-color -out=tfplan
 
       - name: Comment PR with Plan
         if: github.event_name == 'pull_request'
