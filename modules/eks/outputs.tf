@@ -1,10 +1,10 @@
 output "cluster_role_arn" {
-  value = aws_iam_role.cluster.arn
+  value       = aws_iam_role.cluster.arn
   description = "ARN of the IAM Role for the EKS Cluster"
 }
 
 output "node_role_arn" {
-  value = aws_iam_role.node.arn
+  value       = aws_iam_role.node.arn
   description = "ARN of the IAM Role for the EKS Node Pool"
 }
 
