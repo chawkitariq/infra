@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - "**.tf"
-      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 env:
@@ -18,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write
       id-token: write
 
     steps:
@@ -49,13 +47,8 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform Plan
-        id: plan
-        run: |
-          terraform plan \
-          -var="region=${{ secrets.AWS_REGION }}" \
-          -var="vpc_id=${{ secrets.VPC_ID }}" \
-          -no-color -out=tfplan
-
       - name: Terraform Apply
-        run: terraform apply tfplan
+        run: |
+          terraform apply \
+          -var="region=${{ secrets.AWS_REGION }}" \
+          -var="vpc_id=${{ secrets.VPC_ID }}"
