@@ -2,11 +2,11 @@
 .vscode/
 
 *.tfstate
-*.tfstate.d
-*.tfstate.backup
+*.tfstate.*
 
 terraform.tfvars
 
 crash.log
 
 venv
+localstack_providers_override.tf
