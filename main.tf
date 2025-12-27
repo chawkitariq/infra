@@ -15,3 +15,13 @@ module "eks" {
   source     = "./modules/eks"
   subnet_ids = module.vpc.private_subnet_ids
 }
+
+########################################
+# AI LAYER
+########################################
+
+module "sagemaker" {
+  source       = "./modules/sagemaker"
+  vpc_id       = var.vpc_id
+  subnet_ids   = module.vpc.private_subnet_ids
+}
