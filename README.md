@@ -10,7 +10,7 @@ This infrastructure setup provides:
 
 ## Architecture
 
-![Network Architecture](./docs/network-architecture.png)
+![Network Architecture](./docs/infraks.png)
 
 The infrastructure is organized into two main layers:
 
