@@ -14,3 +14,9 @@ variable "private_subnet_cidr_blocks" {
   type        = list(string)
   default     = ["172.31.80.0/20", "172.31.96.0/20"]
 }
+
+variable "enable_private_internet_access" {
+  description = "Whether to create NAT gateways and default routes for private subnets"
+  type        = bool
+  default     = true
+}

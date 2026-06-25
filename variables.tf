@@ -1,6 +1,7 @@
 variable "region" {
   description = "AWS region to deploy resources in"
   type        = string
+  default     = "eu-west-3"
 }
 
 variable "vpc_id" {

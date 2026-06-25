@@ -5,7 +5,7 @@ This repository contains Terraform configurations for deploying AWS infrastructu
 ## Overview
 
 This infrastructure setup provides:
-- **Network Layer**: Multi-AZ VPC with public and private subnets, NAT gateways, and route tables
+- **Network Layer**: Multi-AZ VPC with public and private subnets, optional NAT gateways, and route tables
 - **Compute Layer**: Auto Mode EKS cluster with IAM roles.
 
 ## Architecture
@@ -17,7 +17,7 @@ The infrastructure is organized into two main layers:
 ### Network Layer (VPC Module)
 - **Public Subnets**: 2 subnets (1 per availability zone) for internet-facing resources
 - **Private Subnets**: 2 subnets (1 per availability zone) for application workloads
-- **NAT Gateways**: 2 NAT gateways (1 per AZ) for outbound internet access from private subnets
+- **NAT Gateways**: Optional 2 NAT gateways (1 per AZ) for outbound internet access from private subnets
 - **Route Tables**: Separate route tables for private subnets with NAT gateway routing
 - **Kubernetes Tags**: Subnets are tagged for Kubernetes ELB integration
 
